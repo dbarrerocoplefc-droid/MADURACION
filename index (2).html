@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CÉNIT — Laboratorio de maduración biológica del deportista</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#EEF2EC;
+    --paper-2:#E4EAE0;
+    --grid:#C9D2C4;
+    --ink:#152019;
+    --ink-soft:#4B584E;
+    --line:#B9C3B2;
+    --teal:#1F6E5C;
+    --teal-deep:#124A3F;
+    --amber:#E2A33B;
+    --rust:#C1502E;
+    --card:#F7F9F4;
+    --shadow: 0 1px 0 rgba(21,32,25,0.06);
+    --radius: 2px;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:
+      repeating-linear-gradient(0deg, transparent, transparent 27px, var(--grid) 27px, var(--grid) 28px),
+      repeating-linear-gradient(90deg, transparent, transparent 27px, var(--grid) 27px, var(--grid) 28px),
+      var(--paper);
+    color:var(--ink);
+    font-family:'IBM Plex Sans', sans-serif;
+    line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+  }
+  @media (prefers-reduced-motion: reduce){
+    *{animation-duration:0.001ms !important; transition-duration:0.001ms !important;}
+  }
+  .mono{font-family:'IBM Plex Mono', monospace;}
+  a{color:var(--teal-deep);}
+
+  /* ---------- Header ---------- */
+  header{
+    padding:36px 24px 18px;
+    max-width:1180px;
+    margin:0 auto;
+    border-bottom:1px solid var(--line);
+  }
+  .brand{
+    display:flex;
+    align-items:baseline;
+    gap:14px;
+    flex-wrap:wrap;
+  }
+  .brand .mark{
+    font-family:'Space Grotesk', sans-serif;
+    font-weight:700;
+    font-size:clamp(34px,5vw,52px);
+    letter-spacing:-0.02em;
+    color:var(--ink);
+  }
+  .brand .mark span{color:var(--teal);}
+  .brand .tagline{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12.5px;
+    letter-spacing:.06em;
+    text-transform:uppercase;
+    color:var(--ink-soft);
+    border-left:2px solid var(--teal);
+    padding-left:10px;
+  }
+  header p.lede{
+    max-width:640px;
+    margin:14px 0 0;
+    color:var(--ink-soft);
+    font-size:15px;
+  }
+
+  /* ---------- Layout ---------- */
+  main{
+    max-width:1180px;
+    margin:0 auto;
+    padding:32px 24px 80px;
+    display:grid;
+    grid-template-columns:minmax(0,420px) minmax(0,1fr);
+    gap:28px;
+    align-items:start;
+  }
+  @media (max-width:880px){
+    main{grid-template-columns:1fr;}
+    .panel[style*="sticky"]{position:static !important; top:auto !important;}
+  }
+
+  .panel{
+    background:var(--card);
+    border:1px solid var(--line);
+    box-shadow:var(--shadow);
+  }
+  .panel-head{
+    padding:16px 20px;
+    border-bottom:1px solid var(--line);
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+  }
+  .panel-head h2{
+    font-family:'Space Grotesk', sans-serif;
+    font-size:15px;
+    font-weight:600;
+    letter-spacing:.02em;
+    margin:0;
+    text-transform:uppercase;
+  }
+  .panel-head .idx{font-size:11px; color:var(--ink-soft);}
+  .panel-body{padding:20px;}
+
+  /* ---------- Form ---------- */
+  fieldset{border:0; padding:0; margin:0 0 20px;}
+  legend{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11.5px;
+    text-transform:uppercase;
+    letter-spacing:.06em;
+    color:var(--teal-deep);
+    margin-bottom:10px;
+    padding:0;
+  }
+  .row{display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:12px;}
+  .field{display:flex; flex-direction:column; gap:6px;}
+  .field.full{grid-column:1/-1;}
+  label{font-size:12.5px; color:var(--ink-soft);}
+  input[type=text], input[type=number], input[type=date], select{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:16px;
+    padding:9px 10px;
+    border:1px solid var(--line);
+    background:#fff;
+    color:var(--ink);
+    border-radius:var(--radius);
+    width:100%;
+    max-width:100%;
+  }
+  input:focus-visible, select:focus-visible, button:focus-visible, summary:focus-visible{
+    outline:2px solid var(--teal);
+    outline-offset:2px;
+  }
+  .sexo-toggle{display:flex; gap:8px;}
+  .sexo-toggle label{
+    flex:1;
+    display:flex; align-items:center; justify-content:center;
+    padding:9px 8px;
+    border:1px solid var(--line);
+    background:#fff;
+    cursor:pointer;
+    font-size:13.5px;
+    color:var(--ink-soft);
+  }
+  .sexo-toggle input{position:absolute; opacity:0; pointer-events:none;}
+  .sexo-toggle input:checked + span{color:var(--ink); font-weight:600;}
+  .sexo-toggle label:has(input:checked){background:var(--paper-2); border-color:var(--teal); color:var(--teal-deep);}
+
+  .checkline{display:flex; align-items:flex-start; gap:8px; font-size:12px; color:var(--ink-soft); margin-top:2px;}
+  .checkline input{margin-top:2px;}
+
+  button.primary{
+    width:100%;
+    font-family:'Space Grotesk', sans-serif;
+    font-weight:600;
+    font-size:15px;
+    letter-spacing:.01em;
+    background:var(--teal-deep);
+    color:#EFF5F1;
+    border:0;
+    padding:13px;
+    cursor:pointer;
+    transition:background .15s ease;
+  }
+  button.primary:hover{background:var(--teal);}
+
+  details{border:1px dashed var(--line); padding:12px 14px; margin-top:6px;}
+  details summary{cursor:pointer; font-size:13px; color:var(--teal-deep); font-weight:500;}
+  details .row{margin-top:12px;}
+  .velocity-out{font-family:'IBM Plex Mono', monospace; font-size:13px; margin-top:8px; color:var(--ink-soft);}
+
+  .hint{font-size:11.5px; color:var(--ink-soft); margin-top:4px;}
+
+  /* ---------- Results ---------- */
+  .results-grid{
+    display:grid;
+    grid-template-columns:130px 1fr;
+    gap:22px;
+  }
+  @media (max-width:560px){ .results-grid{grid-template-columns:100px 1fr;} }
+
+  .empty-state{
+    padding:40px 20px;
+    text-align:center;
+    color:var(--ink-soft);
+  }
+  .empty-state .glyph{font-family:'Space Grotesk'; font-size:34px; color:var(--line); margin-bottom:10px;}
+
+  #ruler-wrap{display:flex; justify-content:center; min-width:0;}
+  svg#ruler{overflow:visible; width:100%; height:auto; max-width:118px; display:block;}
+
+  .phase-badge{
+    display:inline-block;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11px;
+    text-transform:uppercase;
+    letter-spacing:.05em;
+    padding:4px 9px;
+    border:1px solid currentColor;
+    margin-bottom:10px;
+  }
+  .big-number{
+    font-family:'Space Grotesk', sans-serif;
+    font-weight:700;
+    font-size:44px;
+    letter-spacing:-0.01em;
+    line-height:1;
+  }
+  .big-number sup{font-size:20px; font-weight:600;}
+  .range-note{font-size:12px; color:var(--ink-soft); margin-top:4px;}
+  .phase-title{font-family:'Space Grotesk'; font-weight:600; font-size:19px; margin:14px 0 6px;}
+  .phase-desc{font-size:14px; color:var(--ink-soft); max-width:52ch;}
+
+  .callout{
+    margin-top:18px;
+    padding:14px 16px;
+    border-left:3px solid var(--amber);
+    background:#FBF3E3;
+    font-size:13.5px;
+  }
+  .callout.rust{border-color:var(--rust); background:#FAEBE5;}
+  .callout strong{display:block; font-size:11.5px; text-transform:uppercase; letter-spacing:.04em; margin-bottom:4px; font-family:'IBM Plex Mono';}
+
+  .stat-strip{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:1px;
+    background:var(--line);
+    margin-top:20px;
+    border:1px solid var(--line);
+  }
+  .stat{background:var(--card); padding:12px 14px;}
+  .stat .k{font-size:10.5px; text-transform:uppercase; letter-spacing:.05em; color:var(--ink-soft); font-family:'IBM Plex Mono';}
+  .stat .v{font-family:'Space Grotesk'; font-weight:600; font-size:18px; margin-top:3px;}
+
+  /* ---------- Footer / comparison ---------- */
+  footer{
+    max-width:1180px;
+    margin:0 auto;
+    padding:0 24px 70px;
+  }
+  footer h2{
+    font-family:'Space Grotesk';
+    font-size:16px;
+    text-transform:uppercase;
+    letter-spacing:.03em;
+    border-top:1px solid var(--line);
+    padding-top:26px;
+  }
+  table{width:100%; border-collapse:collapse; font-size:13px; background:var(--card); border:1px solid var(--line);}
+  th,td{text-align:left; padding:10px 12px; border-bottom:1px solid var(--line); vertical-align:top;}
+  th{font-family:'IBM Plex Mono'; font-size:11px; text-transform:uppercase; letter-spacing:.04em; color:var(--ink-soft); background:var(--paper-2);}
+  tr.current-method td:first-child{color:var(--teal-deep); font-weight:600;}
+  .disclaimer{
+    margin-top:18px;
+    font-size:12.5px;
+    color:var(--ink-soft);
+    max-width:80ch;
+  }
+
+  /* ---------- Mobile refinements ---------- */
+  @media (max-width:520px){
+    header{padding:26px 16px 14px;}
+    main{padding:22px 16px 60px; gap:20px;}
+    footer{padding:0 16px 50px;}
+    .panel-body{padding:16px;}
+    .panel-head{padding:14px 16px;}
+    .row{grid-template-columns:1fr;}
+    .results-grid{grid-template-columns:88px 1fr; gap:14px;}
+    .stat-strip{grid-template-columns:1fr 1fr;}
+    .stat-strip .stat:last-child:nth-child(odd){grid-column:1/-1;}
+    .big-number{font-size:36px;}
+    table{font-size:12px;}
+    th,td{padding:8px;}
+    .brand .tagline{border-left:0; padding-left:0; border-top:2px solid var(--teal); padding-top:6px;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="brand">
+    <div class="mark">C<span>É</span>NIT</div>
+    <div class="tagline">Maduración biológica · Planificación deportiva</div>
+  </div>
+  <p class="lede">Estima el porcentaje de talla adulta alcanzada (PPAH) de un/a joven deportista, ubica su fase respecto al Pico de Velocidad de Crecimiento (PHV) y traduce el resultado en decisiones de carga y bio-banding.</p>
+</header>
+
+<main>
+
+  <!-- FORM -->
+  <section class="panel" aria-labelledby="form-title">
+    <div class="panel-head">
+      <h2 id="form-title">Datos antropométricos</h2>
+      <span class="idx mono">01</span>
+    </div>
+    <div class="panel-body">
+      <form id="calc-form">
+
+        <fieldset>
+          <legend>Sexo</legend>
+          <div class="sexo-toggle" role="radiogroup" aria-label="Sexo del deportista">
+            <label><input type="radio" name="sexo" value="M" checked><span>Chico</span></label>
+            <label><input type="radio" name="sexo" value="F"><span>Chica</span></label>
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>Deportista</legend>
+          <div class="row">
+            <div class="field full">
+              <label for="fnac">Fecha de nacimiento</label>
+              <input type="date" id="fnac" required>
+            </div>
+          </div>
+          <div class="row">
+            <div class="field">
+              <label for="talla">Talla actual (cm)</label>
+              <input type="number" id="talla" min="100" max="220" step="0.1" required placeholder="152.3">
+            </div>
+            <div class="field">
+              <label for="peso">Peso actual (kg)</label>
+              <input type="number" id="peso" min="20" max="150" step="0.1" required placeholder="41.5">
+            </div>
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>Padres biológicos</legend>
+          <div class="row">
+            <div class="field">
+              <label for="tpadre">Talla padre (cm)</label>
+              <input type="number" id="tpadre" min="130" max="220" step="0.1" required placeholder="178">
+            </div>
+            <div class="field">
+              <label for="tmadre">Talla madre (cm)</label>
+              <input type="number" id="tmadre" min="120" max="200" step="0.1" required placeholder="164">
+            </div>
+          </div>
+          <label class="checkline"><input type="checkbox" id="autoinf"> <span>Las tallas de los padres son <strong>autoinformadas</strong> (no medidas). Se aplicará una corrección aproximada a la baja, ya que la literatura muestra una tendencia sistemática a la sobreestimación.</span></label>
+        </fieldset>
+
+        <button type="button" id="calc-btn" class="primary">Calcular maduración</button>
+        <p class="hint">Ningún dato se envía fuera de este documento: todo el cálculo ocurre en tu navegador.</p>
+      </form>
+
+      <details style="margin-top:18px;">
+        <summary>Verificar velocidad de crecimiento (opcional)</summary>
+        <p class="hint" style="margin-top:8px;">Si tienes una medición anterior, puedes contrastar la fase estimada con la velocidad de crecimiento real. Un valor inferior a 1 cm/año es característico de la fase post-PHV.</p>
+        <div class="row">
+          <div class="field">
+            <label for="talla-prev">Talla anterior (cm)</label>
+            <input type="number" id="talla-prev" step="0.1" placeholder="146.0">
+          </div>
+          <div class="field">
+            <label for="fecha-prev">Fecha de esa medición</label>
+            <input type="date" id="fecha-prev">
+          </div>
+        </div>
+        <button type="button" class="primary" id="vel-btn" style="background:var(--ink-soft);">Calcular velocidad</button>
+        <div class="velocity-out" id="vel-out" aria-live="polite"></div>
+      </details>
+    </div>
+  </section>
+
+  <!-- RESULTS -->
+  <section class="panel" aria-labelledby="res-title" style="position:sticky; top:20px;">
+    <div class="panel-head">
+      <h2 id="res-title">Estadiómetro · resultado</h2>
+      <span class="idx mono">02</span>
+    </div>
+    <div class="panel-body" id="results-body">
+      <div class="empty-state" id="empty-state">
+        <div class="glyph">— · —</div>
+        Introduce los datos y pulsa «Calcular maduración» para ver la posición del deportista en la escala de PPAH.
+      </div>
+
+      <div id="results-content" style="display:none;">
+        <div class="results-grid">
+          <div id="ruler-wrap"></div>
+          <div>
+            <span class="phase-badge" id="phase-badge">—</span>
+            <div class="big-number" id="ppah-number">—<sup>%</sup></div>
+            <div class="range-note" id="ppah-range"></div>
+            <div class="phase-title" id="phase-title"></div>
+            <div class="phase-desc" id="phase-desc"></div>
+
+            <div class="callout" id="risk-callout" style="display:none;">
+              <strong id="risk-label">Aviso de carga</strong>
+              <span id="risk-text"></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="stat-strip">
+          <div class="stat"><div class="k">Edad decimal (tramo KR)</div><div class="v" id="stat-edad">—</div></div>
+          <div class="stat"><div class="k">Talla adulta prevista (KR)</div><div class="v" id="stat-diana">—</div></div>
+          <div class="stat"><div class="k">Talla diana Tanner (ref.)</div><div class="v" id="stat-tanner">—</div></div>
+        </div>
+        <div class="stat-strip" style="margin-top:1px;">
+          <div class="stat" style="grid-column:1/-1;"><div class="k">Ventana PHV típica del sexo</div><div class="v" id="stat-ventana">—</div></div>
+        </div>
+
+        <div class="callout" id="range-warning" style="display:none;">
+          <strong>Edad fuera del rango tabulado</strong>
+          <span>Las tablas de Khamis-Roche cubren de 4.0 a 17.5 años. Se ha usado el escalón límite más cercano, así que el resultado es una extrapolación y debe tomarse con más cautela de lo normal.</span>
+        </div>
+
+        <div class="callout" id="method-callout">
+          <strong>Sobre el método y su fuente</strong>
+          <span>Este cálculo aplica la ecuación de <strong>Khamis-Roche</strong> (talla, peso y talla media parental, convertidos a pulgadas/libras) con coeficientes específicos por sexo y edad en pasos de 0.5 años, redondeando siempre la edad decimal hacia abajo, tal como exige el protocolo. Los coeficientes proceden de una <strong>reproducción publicada por un tercero (CalcVita)</strong> que cita a Khamis &amp; Roche (Pediatrics 1994;94:504–507) y su erratum de 1995 — no ha sido cotejada dígito a dígito por nosotros contra el artículo original, que es de acceso restringido. El rango junto al PPAH refleja el error estándar publicado (±5.6 cm en chicos, ±4.3 cm en chicas). La talla diana parental (Tanner) se muestra aparte como contraste independiente. Trátalo como una <strong>estimación orientativa de campo</strong>, no como diagnóstico clínico.</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <h2>Comparativa de sistemas de maduración biológica</h2>
+  <div style="overflow-x:auto; -webkit-overflow-scrolling:touch;">
+  <table>
+    <thead>
+      <tr><th>Sistema</th><th>Método</th><th>Ventaja</th><th>Limitación práctica</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Madurez sexual</td>
+        <td>Evaluación del desarrollo del sistema reproductivo</td>
+        <td>Uso histórico extenso en investigación</td>
+        <td>Invasivo; plantea problemas éticos y de salvaguarda en el deporte actual</td>
+      </tr>
+      <tr>
+        <td>Madurez esquelética</td>
+        <td>Radiografía de mano/muñeca</td>
+        <td>Estándar de referencia (gold standard)</td>
+        <td>Radiación, equipamiento médico, coste y personal especializado</td>
+      </tr>
+      <tr class="current-method">
+        <td>Madurez somática ← este cálculo</td>
+        <td>Antropometría de campo (talla, peso, talla parental)</td>
+        <td>Práctico, económico, no invasivo, aplicable en masa</td>
+        <td>Exige protocolo estandarizado y control de calidad del medidor</td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+  <p class="disclaimer">Los umbrales de fase (≈85% inicio del estirón, 88–96% circa-PHV, ≈90–91.5% pico, &gt;96% post-PHV) proceden de la clasificación por PPAH recomendada frente a las ecuaciones de <em>maturity offset</em>, que sólo son fiables entre los 13 y 15 años y distorsionan sistemáticamente a los maduradores tempranos y tardíos. Clasificar a un deportista como de maduración adelantada, a tiempo o retrasada frente a sus pares requiere además convertir el PPAH en puntuaciones z con una referencia poblacional local — esta app no sustituye esa comparación ni una valoración de un profesional de ciencias del deporte o medicina.</p>
+</footer>
+
+<script>
+(function(){
+  const form = document.getElementById('calc-form');
+  const emptyState = document.getElementById('empty-state');
+  const resultsContent = document.getElementById('results-content');
+
+  // Coeficientes Khamis-Roche (corregidos por erratum), en pasos de 0.5 años, 4.0–17.5.
+  // Fuente: reproducción publicada por CalcVita (calcvita.com/en/calculators/child-height-predictor),
+  // que cita Khamis HJ, Roche AF. Pediatrics 1994;94:504–507 y el erratum de 1995;95(3):457.
+  // Es una fuente secundaria: no ha sido cotejada dígito a dígito contra el artículo original
+  // (de acceso restringido), así que trátala como la mejor referencia disponible, no como texto
+  // verificado contra la fuente primaria.
+  const KR_BOYS = [
+    {age:4.0,b0:-10.2567,b1:1.23812,b2:-0.087235,b3:0.50286},
+    {age:4.5,b0:-10.719,b1:1.15964,b2:-0.074454,b3:0.52887},
+    {age:5.0,b0:-11.0213,b1:1.10674,b2:-0.064778,b3:0.53919},
+    {age:5.5,b0:-11.1556,b1:1.0748,b2:-0.05776,b3:0.53691},
+    {age:6.0,b0:-11.1138,b1:1.05923,b2:-0.052947,b3:0.52513},
+    {age:6.5,b0:-11.0221,b1:1.05542,b2:-0.049892,b3:0.50692},
+    {age:7.0,b0:-10.9984,b1:1.05877,b2:-0.048144,b3:0.48538},
+    {age:7.5,b0:-11.0214,b1:1.06467,b2:-0.047256,b3:0.46361},
+    {age:8.0,b0:-11.0696,b1:1.06853,b2:-0.046778,b3:0.44469},
+    {age:8.5,b0:-11.122,b1:1.06572,b2:-0.046261,b3:0.43171},
+    {age:9.0,b0:-11.1571,b1:1.05166,b2:-0.045254,b3:0.42776},
+    {age:9.5,b0:-11.1405,b1:1.02174,b2:-0.043311,b3:0.43593},
+    {age:10.0,b0:-11.038,b1:0.97135,b2:-0.039981,b3:0.45932},
+    {age:10.5,b0:-10.8286,b1:0.89589,b2:-0.034814,b3:0.50101},
+    {age:11.0,b0:-10.4917,b1:0.81239,b2:-0.02905,b3:0.54781},
+    {age:11.5,b0:-10.0065,b1:0.74134,b2:-0.024167,b3:0.58409},
+    {age:12.0,b0:-9.3522,b1:0.68325,b2:-0.020076,b3:0.60927},
+    {age:12.5,b0:-8.6055,b1:0.63869,b2:-0.016681,b3:0.62279},
+    {age:13.0,b0:-7.8632,b1:0.60818,b2:-0.013895,b3:0.62407},
+    {age:13.5,b0:-7.1348,b1:0.59228,b2:-0.011624,b3:0.61253},
+    {age:14.0,b0:-6.4299,b1:0.59151,b2:-0.009776,b3:0.58762},
+    {age:14.5,b0:-5.7578,b1:0.60643,b2:-0.008261,b3:0.54875},
+    {age:15.0,b0:-5.1282,b1:0.63757,b2:-0.006988,b3:0.49536},
+    {age:15.5,b0:-4.5092,b1:0.68548,b2:-0.005863,b3:0.42687},
+    {age:16.0,b0:-3.9292,b1:0.75069,b2:-0.004795,b3:0.34271},
+    {age:16.5,b0:-3.4873,b1:0.83375,b2:-0.003695,b3:0.24231},
+    {age:17.0,b0:-3.283,b1:0.9352,b2:-0.00247,b3:0.1251},
+    {age:17.5,b0:-3.4156,b1:1.05558,b2:-0.001027,b3:-0.0095}
+  ];
+  const KR_GIRLS = [
+    {age:4.0,b0:-8.1325,b1:1.24768,b2:-0.19435,b3:0.44774},
+    {age:4.5,b0:-6.47656,b1:1.22177,b2:-0.18519,b3:0.41381},
+    {age:5.0,b0:-5.13582,b1:1.19932,b2:-0.1753,b3:0.38467},
+    {age:5.5,b0:-4.13791,b1:1.1788,b2:-0.16484,b3:0.36039},
+    {age:6.0,b0:-3.51039,b1:1.15866,b2:-0.154,b3:0.34105},
+    {age:6.5,b0:-3.14322,b1:1.13737,b2:-0.14294,b3:0.32672},
+    {age:7.0,b0:-2.87645,b1:1.11342,b2:-0.13184,b3:0.31748},
+    {age:7.5,b0:-2.66291,b1:1.08525,b2:-0.12086,b3:0.3134},
+    {age:8.0,b0:-2.45559,b1:1.05135,b2:-0.11019,b3:0.31457},
+    {age:8.5,b0:-2.20728,b1:1.01018,b2:-0.09999,b3:0.32105},
+    {age:9.0,b0:-1.87098,b1:0.9602,b2:-0.09044,b3:0.33291},
+    {age:9.5,b0:-1.0633,b1:0.89989,b2:-0.08171,b3:0.35025},
+    {age:10.0,b0:0.33468,b1:0.82771,b2:-0.07397,b3:0.37312},
+    {age:10.5,b0:1.97366,b1:0.74213,b2:-0.06739,b3:0.40161},
+    {age:11.0,b0:3.50436,b1:0.67173,b2:-0.06136,b3:0.42042},
+    {age:11.5,b0:4.57747,b1:0.6415,b2:-0.05518,b3:0.41686},
+    {age:12.0,b0:4.84365,b1:0.64452,b2:-0.04894,b3:0.3949},
+    {age:12.5,b0:4.27869,b1:0.67386,b2:-0.04272,b3:0.3585},
+    {age:13.0,b0:3.21417,b1:0.7226,b2:-0.03661,b3:0.31163},
+    {age:13.5,b0:1.83456,b1:0.78383,b2:-0.03067,b3:0.25826},
+    {age:14.0,b0:0.32425,b1:0.85062,b2:-0.025,b3:0.20235},
+    {age:14.5,b0:-1.13224,b1:0.91605,b2:-0.01967,b3:0.14787},
+    {age:15.0,b0:-2.35055,b1:0.97319,b2:-0.01477,b3:0.0988},
+    {age:15.5,b0:-3.10326,b1:1.01514,b2:-0.01037,b3:0.05909},
+    {age:16.0,b0:-3.17885,b1:1.03496,b2:-0.00655,b3:0.03272},
+    {age:16.5,b0:-2.41657,b1:1.02573,b2:-0.0034,b3:0.02364},
+    {age:17.0,b0:-0.65579,b1:0.98054,b2:-0.001,b3:0.03584},
+    {age:17.5,b0:2.26429,b1:0.89246,b2:0.00057,b3:0.07327}
+  ];
+  const KR_SE_CM = {M:5.6, F:4.3}; // error estándar aproximado publicado (≈2.2in chicos / 1.7in chicas)
+  const KR_MIN_AGE = 4.0, KR_MAX_AGE = 17.5;
+
+  function krRow(sexo, age){
+    const table = sexo === 'M' ? KR_BOYS : KR_GIRLS;
+    const clamped = Math.max(KR_MIN_AGE, Math.min(KR_MAX_AGE, age));
+    const step = Math.floor(clamped*2)/2; // redondeo hacia abajo al escalón de 0.5, según protocolo
+    return table.find(r => Math.abs(r.age - step) < 0.001) || table[0];
+  }
+
+  const RANGE_LOW = 75, RANGE_HIGH = 103; // scale bounds for the ruler
+
+  const bands = [
+    {from:75, to:85, color:'#DCE3D6', label:'PRE-ESTIRÓN'},
+    {from:85, to:88, color:'#CFE3DB', label:'INICIO ESTIRÓN'},
+    {from:88, to:96, color:'#F3DFB4', label:'CIRCA-PHV'},
+    {from:96, to:103,color:'#BFDDD3', label:'POST-PHV'}
+  ];
+
+  function yFor(val, height){
+    const clamped = Math.max(RANGE_LOW, Math.min(RANGE_HIGH, val));
+    const t = (clamped - RANGE_LOW) / (RANGE_HIGH - RANGE_LOW);
+    return height - t * height; // higher % => higher on the ruler
+  }
+
+  function buildRuler(ppah, low, high){
+    const W = 118, H = 420, top = 16, bottom = 16;
+    const drawH = H - top - bottom;
+    let svg = `<svg id="ruler" width="${W}" height="${H+30}" viewBox="0 0 ${W} ${H+30}" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Escala de porcentaje de talla adulta predicha, valor actual ${ppah.toFixed(1)} por ciento">`;
+
+    const barX = 46, barW = 26;
+
+    // bands
+    bands.forEach(b=>{
+      const y1 = top + (H - top - bottom) - ( (Math.min(b.to,RANGE_HIGH)-RANGE_LOW)/(RANGE_HIGH-RANGE_LOW) )*drawH;
+      const y2 = top + (H - top - bottom) - ( (Math.max(b.from,RANGE_LOW)-RANGE_LOW)/(RANGE_HIGH-RANGE_LOW) )*drawH;
+      svg += `<rect x="${barX}" y="${y1}" width="${barW}" height="${y2-y1}" fill="${b.color}"></rect>`;
+    });
+
+    svg += `<rect x="${barX}" y="${top}" width="${barW}" height="${drawH}" fill="none" stroke="#152019" stroke-width="1"></rect>`;
+
+    // ticks
+    [75,80,85,88,90,91.5,96,100,103].forEach(t=>{
+      const y = top + drawH - ((t-RANGE_LOW)/(RANGE_HIGH-RANGE_LOW))*drawH;
+      const major = [85,88,96,100].includes(t);
+      svg += `<line x1="${barX-6}" y1="${y}" x2="${barX}" y2="${y}" stroke="#4B584E" stroke-width="${major?1.4:1}"></line>`;
+      if(major || t===90 || t===91.5){
+        svg += `<text x="${barX-10}" y="${y+3}" font-family="IBM Plex Mono" font-size="9.5" text-anchor="end" fill="#4B584E">${t}</text>`;
+      }
+    });
+
+    // uncertainty range
+    const yLow = top + drawH - ((Math.min(Math.max(low,RANGE_LOW),RANGE_HIGH)-RANGE_LOW)/(RANGE_HIGH-RANGE_LOW))*drawH;
+    const yHigh = top + drawH - ((Math.min(Math.max(high,RANGE_LOW),RANGE_HIGH)-RANGE_LOW)/(RANGE_HIGH-RANGE_LOW))*drawH;
+    svg += `<rect x="${barX}" y="${yHigh}" width="${barW}" height="${yLow-yHigh}" fill="#152019" opacity="0.12"></rect>`;
+
+    // marker
+    const yMark = top + drawH - ((Math.min(Math.max(ppah,RANGE_LOW),RANGE_HIGH)-RANGE_LOW)/(RANGE_HIGH-RANGE_LOW))*drawH;
+    svg += `<polygon points="${barX+barW+4},${yMark} ${barX+barW+16},${yMark-7} ${barX+barW+16},${yMark+7}" fill="#C1502E"></polygon>`;
+    svg += `<line x1="${barX}" y1="${yMark}" x2="${barX+barW}" y2="${yMark}" stroke="#C1502E" stroke-width="2"></line>`;
+    svg += `<text x="${barX+barW+20}" y="${yMark+4}" font-family="Space Grotesk" font-weight="700" font-size="13" fill="#C1502E">${ppah.toFixed(1)}%</text>`;
+
+    svg += `<text x="${barX+barW/2}" y="${H+22}" font-family="IBM Plex Mono" font-size="9.5" text-anchor="middle" fill="#4B584E">% TALLA ADULTA</text>`;
+    svg += `</svg>`;
+    return svg;
+  }
+
+  function decimalAge(birth){
+    const now = new Date();
+    const years = (now - birth) / (1000*60*60*24*365.25);
+    return Math.floor(years*2)/2; // regla: redondeo siempre hacia abajo, a la media unidad
+  }
+
+  function phaseFor(ppah){
+    if(ppah < 85) return {
+      key:'pre', color:'#2F6D5B', badge:'PRE-ESTIRÓN',
+      title:'Antes del estirón adolescente',
+      desc:'El crecimiento aún es relativamente estable, previo al despegue de la velocidad de crecimiento. Es un buen momento para el desarrollo técnico y de habilidades motoras de base, con menor riesgo de sobrecarga estructural.'
+    };
+    if(ppah < 88) return {
+      key:'inicio', color:'#1F6E5C', badge:'INICIO DEL ESTIRÓN',
+      title:'Despegue del estirón de crecimiento',
+      desc:'La velocidad de crecimiento empieza a acelerarse. Conviene empezar a vigilar la técnica de carrera y salto, e introducir progresivamente trabajo de control motor.'
+    };
+    if(ppah <= 96) return {
+      key:'circa', color:'#B9791F', badge:'CIRCA-PHV', risky:true,
+      title: ppah>=90 ? 'Entorno del pico de velocidad de crecimiento (PHV)' : 'Fase circa-PHV',
+      desc:'Fase de máximo crecimiento en estatura y cambios antropométricos rápidos, con alta variabilidad en el control motor. El hueso crece más rápido de lo que se adaptan músculos y tendones.'
+    };
+    return {
+      key:'post', color:'#124A3F', badge:'POST-PHV',
+      title:'Madurez somática / post-PHV',
+      desc:'El crecimiento óseo se desacelera de forma marcada (habitualmente por debajo de 1 cm/año) y se consolidan las adaptaciones estructurales y la hipertrofia muscular. Ventana favorable para el desarrollo de fuerza y potencia.'
+    };
+  }
+
+  document.getElementById('calc-btn').addEventListener('click', function(){
+   try {
+
+    const sexo = form.querySelector('input[name="sexo"]:checked').value;
+    const fnac = new Date(document.getElementById('fnac').value);
+    const talla = parseFloat(document.getElementById('talla').value);
+    const tpadreRaw = parseFloat(document.getElementById('tpadre').value);
+    const tmadreRaw = parseFloat(document.getElementById('tmadre').value);
+    const autoinf = document.getElementById('autoinf').checked;
+    const peso = parseFloat(document.getElementById('peso').value);
+
+    if(!document.getElementById('fnac').value || isNaN(talla) || isNaN(peso) || isNaN(tpadreRaw) || isNaN(tmadreRaw)){
+      alert('Revisa que todos los campos obligatorios estén completos.');
+      return;
+    }
+
+    const tpadre = autoinf ? tpadreRaw - 1.5 : tpadreRaw;
+    const tmadre = autoinf ? tmadreRaw - 1.5 : tmadreRaw;
+
+    // Talla diana parental (Tanner) — se mantiene como referencia cruzada, no como base del PPAH.
+    const tallaDiana = sexo === 'M'
+      ? (tpadre + tmadre + 13) / 2
+      : (tpadre + tmadre - 13) / 2;
+
+    const edad = decimalAge(fnac);
+    const fueraDeRango = edad < KR_MIN_AGE || edad > KR_MAX_AGE;
+    const row = krRow(sexo, edad);
+
+    // Conversión obligatoria a sistema imperial, como exige la ecuación KR.
+    const alturaIn = talla / 2.54;
+    const pesoLb = peso * 2.20462;
+    const midParentCm = (tpadre + tmadre) / 2; // media directa, sin el ajuste ±13 de Tanner
+    const midParentIn = midParentCm / 2.54;
+
+    const pahIn = row.b0 + row.b1*alturaIn + row.b2*pesoLb + row.b3*midParentIn;
+    const pahCm = pahIn * 2.54;
+
+    const seCm = KR_SE_CM[sexo];
+    const pahLow = pahCm - seCm;
+    const pahHigh = pahCm + seCm;
+
+    const ppah = (talla / pahCm) * 100;
+    const ppahHigh = (talla / pahLow) * 100;
+    const ppahLow = (talla / pahHigh) * 100;
+
+    const ventana = sexo === 'M' ? '11 – 17 años' : '9 – 15 años';
+
+    const ph = phaseFor(ppah);
+
+    document.getElementById('ruler-wrap').innerHTML = buildRuler(ppah, ppahLow, ppahHigh);
+
+    const badge = document.getElementById('phase-badge');
+    badge.textContent = ph.badge;
+    badge.style.color = ph.color;
+
+    document.getElementById('ppah-number').innerHTML = ppah.toFixed(1) + '<sup>%</sup>';
+    document.getElementById('ppah-number').style.color = ph.color;
+    document.getElementById('ppah-range').textContent =
+      `Rango orientativo: ${ppahLow.toFixed(1)}% – ${ppahHigh.toFixed(1)}% (según incertidumbre de la talla diana)`;
+    document.getElementById('phase-title').textContent = ph.title;
+    document.getElementById('phase-desc').textContent = ph.desc;
+
+    const riskBox = document.getElementById('risk-callout');
+    if(ph.risky){
+      riskBox.style.display = 'block';
+      riskBox.className = 'callout rust';
+      document.getElementById('risk-label').textContent = 'Ventana circa-PHV: precaución de carga';
+      document.getElementById('risk-text').textContent =
+        'En este rango aumenta el riesgo de patologías por sobreuso óseo como Osgood-Schlatter o enfermedad de Sever. Valora reducir de forma preventiva las cargas de impacto y prioriza el bio-banding por madurez antes que por edad cronológica en sesiones de contacto o pliometría intensa.';
+    } else {
+      riskBox.style.display = 'none';
+    }
+
+    document.getElementById('stat-edad').textContent = edad.toFixed(1) + ' → ' + row.age.toFixed(1) + ' años';
+    document.getElementById('stat-diana').textContent = pahCm.toFixed(1) + ' cm (±' + seCm.toFixed(1) + ')';
+    document.getElementById('stat-tanner').textContent = tallaDiana.toFixed(1) + ' cm';
+    document.getElementById('stat-ventana').textContent = ventana;
+    document.getElementById('range-warning').style.display = fueraDeRango ? 'block' : 'none';
+
+    emptyState.style.display = 'none';
+    resultsContent.style.display = 'block';
+    if(typeof resultsContent.scrollIntoView === 'function'){
+      try { resultsContent.scrollIntoView({behavior:'smooth', block:'nearest'}); } catch(err){}
+    }
+
+   } catch(err){
+     console.error(err);
+     alert('Ha ocurrido un error al calcular: ' + err.message);
+   }
+  });
+
+  document.getElementById('vel-btn').addEventListener('click', function(){
+    const tallaActualEl = document.getElementById('talla');
+    const fnacEl = document.getElementById('fnac');
+    const tallaPrev = parseFloat(document.getElementById('talla-prev').value);
+    const fechaPrevVal = document.getElementById('fecha-prev').value;
+    const out = document.getElementById('vel-out');
+
+    if(!tallaActualEl.value || !fechaPrevVal || isNaN(tallaPrev)){
+      out.textContent = 'Completa la talla actual (arriba) y los dos campos de la medición anterior.';
+      return;
+    }
+    const fechaPrev = new Date(fechaPrevVal);
+    const hoy = new Date();
+    const years = (hoy - fechaPrev) / (1000*60*60*24*365.25);
+    if(years <= 0){
+      out.textContent = 'La fecha anterior debe ser previa a hoy.';
+      return;
+    }
+    const tallaActual = parseFloat(tallaActualEl.value);
+    const velocidad = (tallaActual - tallaPrev) / years;
+    let nota;
+    if(velocidad < 1) nota = 'compatible con fase post-PHV (desaceleración marcada).';
+    else if(velocidad < 5) nota = 'crecimiento moderado; contrástalo con el PPAH calculado.';
+    else nota = 'velocidad elevada, compatible con fase circa-PHV.';
+    out.textContent = `Velocidad de crecimiento ≈ ${velocidad.toFixed(1)} cm/año — ${nota}`;
+  });
+})();
+</script>
+
+</body>
+</html>
