@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#15503F"/>
+      <stop offset="1" stop-color="#0E1712"/>
+    </linearGradient>
+    <radialGradient id="dotGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0" stop-color="#F0BE6B"/>
+      <stop offset="1" stop-color="#E2A33B"/>
+    </radialGradient>
+  </defs>
+
+  <!-- background -->
+  <rect width="512" height="512" fill="url(#bg)"/>
+
+  <!-- baseline tick (ruler nod, kept minimal) -->
+  <line x1="96" y1="372" x2="416" y2="372" stroke="#EEF2EC" stroke-opacity="0.14" stroke-width="6" stroke-linecap="round"/>
+
+  <!-- growth / PHV curve -->
+  <path d="M104,366
+           C160,366 176,244 224,214
+           C280,178 332,176 408,150"
+        fill="none"
+        stroke="#EEF2EC"
+        stroke-width="34"
+        stroke-linecap="round"
+        stroke-linejoin="round"/>
+
+  <!-- peak-velocity marker -->
+  <circle cx="216" cy="220" r="30" fill="url(#dotGlow)" stroke="#0E1712" stroke-width="6"/>
+</svg>
